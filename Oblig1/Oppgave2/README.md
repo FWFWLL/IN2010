@@ -78,14 +78,21 @@ END
 ```
 
 ## Big-O Notation
-if `N` has no limit:
-push_front(x): O(1)
-push_middle(x): O(n)
-push_back(x): O(1)
-get(i): O(n)
 
-if `N` has a bound:
-push_front(x): O(1)
-push_middle(x): O(1)
-push_back(x): O(1)
-get(i): O(1)
+### if `N` has no limit:  
+
+Method | Big-O
+--- | --- |
+push_front(x) | O(1)
+push_middle(x) | O(n)
+push_back(x) | O(1)
+get(i) | O(n)
+
+### if `N` has a bound:
+
+Method | Big-O
+--- | --- |
+push_front(x) | O(1)
+push_middle(x) | O(1)
+push_back(x) | O(1)
+get(i) | O(1)
