@@ -2,7 +2,7 @@ import java.util.Scanner;
 
 public class Main {
 	public static void main(String[] args) {
-		Teque teque = new Teque(); // Initialize a new Teque, use `operationsLeft` as maxSize of our innner array
+		Teque teque = new Teque(); // Initialize a new Teque
 
 		/* Using try-with-resources to read from stdin */
 		try(Scanner input = new Scanner(System.in)) {
