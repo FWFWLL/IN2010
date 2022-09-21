@@ -1,6 +1,5 @@
 # Oppgave 2
 
-
 ## Pseudocode
 ```
 push_front(x)
