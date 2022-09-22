@@ -38,3 +38,22 @@ FUNCTION printBalancedArray(ARRAY, START, END)
 	printBalancedArray(ARRAY, MIDDLE + 1, END) -- Recursively PRINT right side of ARRAY
 END
 ```
+
+```lua
+FUNCTION printBalancedHeap(HEAP, START, END)
+	CREATE temporary heap using HEAP
+	-- Base case
+	IF START < END
+		STOP
+	END
+
+	SET MIDDLE to (START + END) / 2
+
+	POLL HEAP until we reach index of middle
+
+	PRINT polled element from HEAP
+
+	printBalancedArray(HEAP, START, MIDDLE - 1) -- Recursively PRINT left side of ARRAY
+	printBalancedArray(HEAP, MIDDLE + 1, END) -- Recursively PRINT right side of ARRAY
+END
+```
