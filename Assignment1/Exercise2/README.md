@@ -2,7 +2,7 @@
 
 ## Pseudocode
 ```
-push_front(x)
+FUNCTION push_front(x)
 	CREATE new node
 
 	IF size of queue EQUALS 0 THEN
@@ -22,7 +22,7 @@ END
 ```
 
 ```
-push_middle(x)
+FUNCTION push_middle(x)
 	CREATE new node
 
 	IF size of queue EQUALS 0 THEN
@@ -46,7 +46,7 @@ END
 ```
 
 ```
-push_back(x)
+FUNCTION push_back(x)
 	CREATE new node
 
 	IF size of queue EQUALS 0 THEN
@@ -66,7 +66,7 @@ END
 ```
 
 ```
-get(i)
+FUNCTION get(i)
 	SET current node to head
 
 	FOREACH node up to index i
