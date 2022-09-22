@@ -53,7 +53,7 @@ FUNCTION printBalancedHeap(HEAP, START, END)
 
 	PRINT polled element from HEAP
 
-	printBalancedArray(HEAP, START, MIDDLE - 1) -- Recursively PRINT left side of ARRAY
-	printBalancedArray(HEAP, MIDDLE + 1, END) -- Recursively PRINT right side of ARRAY
+	printBalancedArray(HEAP, START, MIDDLE - 1) -- Recursively PRINT left side of HEAP
+	printBalancedArray(HEAP, MIDDLE + 1, END) -- Recursively PRINT right side of HEAP
 END
 ```
