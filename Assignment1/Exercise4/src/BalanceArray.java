@@ -23,11 +23,9 @@ public class BalanceArray {
 			return;
 
 		int middle = (start + end) / 2; // Get index of the middle element
-
 		System.out.println(sortedArray.get(middle)); // Print current node
 
 		printBalancedArray(sortedArray, start, middle - 1); // Print left side of current node
-
 		printBalancedArray(sortedArray, middle + 1, end); // Print right side of current node
 	}
 }
