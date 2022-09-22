@@ -1,6 +1,7 @@
 # Exercise 3
 
 ## Pseudocode
+
 ```
 SET cat's node to first number from STDIN
 

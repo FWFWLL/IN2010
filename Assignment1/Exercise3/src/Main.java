@@ -1,17 +1,19 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.HashMap;
-import java.util.Scanner;
 
 public class Main {
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		HashMap<String, String> tree = new HashMap<String, String>(); // Use a HashMap to store parent-child node relations
 
-		Scanner stdin = new Scanner(System.in); // Get input from stdin
+		BufferedReader stdin = new BufferedReader(new InputStreamReader(System.in)); // Get input from stdin
 
-		String catNode = stdin.nextLine(); // Grab the node where the cat is located
+		String kitten = stdin.readLine(); // Grab the node where the cat is located
 
 		/* Insert the nodes into our HashMap */
-		while(true) {
-			String[] nodes = stdin.nextLine().split(" ");
+		for(String line = stdin.readLine(); !line.equals("-1"); line = stdin.readLine()) {
+			String[] nodes = line.split(" "); // Split line into nodes
 
 			/* Stop when we receive a -1 from stdin */
 			if(nodes[0].equals("-1"))
@@ -23,18 +25,17 @@ public class Main {
 		}
 
 		/* Output the route the cat has to take */
-		while(true) {
-			System.out.print(catNode);
+		for(;;) {
+			System.out.print(kitten);
 
 			/* Stop when we reach the root */
-			if(!tree.containsKey(catNode))
+			if(!tree.containsKey(kitten))
 				break;
 
 			System.out.print(" ");
-			catNode = tree.get(catNode); // Cat climbing down the tree
+			kitten = tree.get(kitten); // Cat climbing down the tree (^w^)
 		}
 		
 		System.out.println();
-		stdin.close(); // Remember to close our Scanner
 	}
 }
