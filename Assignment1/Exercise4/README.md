@@ -7,22 +7,40 @@ First compile the .java files
 make
 ```
 
-Run this command to run this exercise:
+---
+
+To run `BalanceArray`:
 ```bash
 seq <INTEGER> | java -classpath build/ BalanceArray
 ```
 Replace `<INTEGER>` with any integer
 
-OR
+**OR**
 
-Just run this:
+Just run:
 ```bash
-seq `<INTEGER>` | make run
+seq `<INTEGER>` | make run_array
 ```
-Remember to replace `<INTEGER>`
+Remember to replace `<INTEGER>`  
+
+---
+
+To run `BalanceHeap`:
+```bash
+seq `<INTEGER>` | java -classpath build/ BalanceHeap
+```
+
+**OR**
+
+Just run:
+```bash
+seq `<INTEGER>` | make run_heap
+```
+Remember to replace `<INTEGER>`  
 
 ## Pseudocode
 
+`BalanceArray` algorithm:
 ```lua
 FUNCTION printBalancedArray(ARRAY, START, END)
 	-- Base case
@@ -39,6 +57,7 @@ FUNCTION printBalancedArray(ARRAY, START, END)
 END
 ```
 
+`BalanceHeap` algorithm:
 ```lua
 FUNCTION printBalancedHeap(HEAP, START, END)
 	CREATE temporary heap using HEAP
