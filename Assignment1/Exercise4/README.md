@@ -19,7 +19,7 @@ Replace `<INTEGER>` with any integer
 
 Just run:
 ```bash
-seq `<INTEGER>` | make run_array
+seq <INTEGER> | make run_array
 ```
 Remember to replace `<INTEGER>`  
 
@@ -27,14 +27,14 @@ Remember to replace `<INTEGER>`
 
 To run `BalanceHeap`:
 ```bash
-seq `<INTEGER>` | java -classpath build/ BalanceHeap
+seq <INTEGER> | java -classpath build/ BalanceHeap
 ```
 
 **OR**
 
 Just run:
 ```bash
-seq `<INTEGER>` | make run_heap
+seq <INTEGER> | make run_heap
 ```
 Remember to replace `<INTEGER>`  
 
