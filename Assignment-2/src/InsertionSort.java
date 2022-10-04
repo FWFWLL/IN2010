@@ -1,4 +1,4 @@
-public class InsertionSort {
+public final class InsertionSort extends SortingAlgorithm {
 	public static void sort(int[] array) {
 		for(int step = 1; step < array.length; step++) {
 			int key = array[step];

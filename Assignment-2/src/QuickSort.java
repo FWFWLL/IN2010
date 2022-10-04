@@ -1,10 +1,4 @@
-public class QuickSort {
-	private static void swap(int[] array, int index1, int index2) {
-		int temp = array[index1];
-		array[index1] = array[index2];
-		array[index2] = temp;
-	}
-
+public final class QuickSort extends SortingAlgorithm {
 	private static int partition(int[] array, int low, int high) {
 		int pivot = array[high];
 		int i = low - 1;
