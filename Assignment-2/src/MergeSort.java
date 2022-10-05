@@ -49,7 +49,12 @@ public final class MergeSort extends SortingAlgorithm {
 		merge(array, left, right);
 	}
 
-	public static void sort(int[] array) {
+	public void sort(int[] array) {
 		mergeSort(array);
+	}
+
+	public void sortToFile(int[] array, String inputFileName) {
+		sort(array);
+		writeToFile(array, inputFileName + "_merge.out");
 	}
 }

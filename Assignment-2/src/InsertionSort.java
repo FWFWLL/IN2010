@@ -1,5 +1,5 @@
 public final class InsertionSort extends SortingAlgorithm {
-	public static void sort(int[] array) {
+	public void sort(int[] array) {
 		for(int step = 1; step < array.length; step++) {
 			int key = array[step];
 			int j  = step - 1;
@@ -13,5 +13,10 @@ public final class InsertionSort extends SortingAlgorithm {
 
 			array[j + 1] = key;
 		}
+	}
+
+	public void sortToFile(int[] array, String inputFileName) {
+		sort(array);
+		writeToFile(array, inputFileName + "_insertion.out");
 	}
 }
