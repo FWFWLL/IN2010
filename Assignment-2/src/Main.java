@@ -20,6 +20,7 @@ public final class Main {
 			algorithm.sortToFile(intArray.clone(), args[0]);
 	}
 
+	// Return whether an array is sorted
 	public static boolean isSorted(int[] array) {
 		for(int i = 1; i < array.length; i++)
 			if(array[i - 1] > array[i])
