@@ -3,10 +3,33 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public abstract class SortingAlgorithm {
-	protected static void swap(int[] array, int index1, int index2) {
-		int temp = array[index1];
-		array[index1] = array[index2];
-		array[index2] = temp;
+	protected int comparisons = 0;
+	protected int swaps = 0;
+
+	protected boolean compare(boolean expr) {
+		comparisons++;
+
+		return expr;
+	}
+
+	protected void swap(int[] array, int a, int b) {
+		int temp = array[a];
+		array[a] = array[b];
+		array[b] = temp;
+
+		swaps++;
+	}
+
+	protected void insert(int[] array, int a, int b) {
+		array[a] = array[b];
+
+		swaps++;
+	}
+
+	protected void insertInto(int[] array, int a, int b) {
+		array[a] = b;
+
+		swaps++;
 	}
 
 	// Write an array of integers into a file

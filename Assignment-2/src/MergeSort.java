@@ -1,27 +1,33 @@
 public final class MergeSort extends SortingAlgorithm {
 	// Merge two sub-arrays
-	private static void merge(int[] array, int[] left, int[] right) {
+	private void merge(int[] array, int[] left, int[] right) {
 		// Store current indexes of our arrays
 		int i = 0;
 		int j = 0;
 		int k = 0;
 
 		while(i < left.length && j < right.length) {
-			if(left[i] <= right[j])
+			if(compare(left[i] <= right[j]))
 				array[k++] = left[i++];
 			else
 				array[k++] = right[j++];
+
+			swaps++;
 		}
 
-		while(i < left.length)
+		while(i < left.length) {
 			array[k++] = left[i++];
+			swaps++;
+		}
 
-		while(j < right.length)
+		while(j < right.length) {
 			array[k++] = right[j++];
+			swaps++;
+		}
 	}
 
 	// Divide the array into two sub-arrays, sort them, then merge the arrays
-	private static void mergeSort(int[] array) {
+	private void mergeSort(int[] array) {
 		int length = array.length;
 
 		// Base case
@@ -54,7 +60,15 @@ public final class MergeSort extends SortingAlgorithm {
 	}
 
 	public void sortToFile(int[] array, String inputFileName) {
+		long t = System.nanoTime();
 		sort(array);
+		long time = (System.nanoTime() - t) / 1000;
+
+		System.out.println("MergeSort:");
+		System.out.println("\tTime: " + time + "ms");
+		System.out.println("\tComparisons: " + comparisons);
+		System.out.println("\tSwaps: " + swaps);
+
 		writeToFile(array, inputFileName + "_merge.out");
 	}
 }

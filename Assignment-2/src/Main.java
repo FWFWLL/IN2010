@@ -19,12 +19,4 @@ public final class Main {
 		for(SortingAlgorithm algorithm : algorithms)
 			algorithm.sortToFile(intArray.clone(), args[0]);
 	}
-
-	// Return whether an array is sorted
-	public static boolean isSorted(int[] array) {
-		for(int i = 1; i < array.length; i++)
-			if(array[i - 1] > array[i])
-				return false;
-		return true;
-	}
 }
