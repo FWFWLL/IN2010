@@ -9,7 +9,7 @@ all: $(SRCDIR)/*.java | $(BUILDDIR)
 	@$(JC) $^ -d $(BUILDDIR)
 
 clean:
-	@rm -rv $(BUILDDIR) test/*.out
+	@rm -rv $(BUILDDIR) test/*.out test/*.csv
 
 run: all $(INPUT)
 	@java -classpath $(BUILDDIR) Main $(INPUT)

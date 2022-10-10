@@ -5,6 +5,7 @@ import java.io.IOException;
 public abstract class SortingAlgorithm {
 	protected int comparisons = 0;
 	protected int swaps = 0;
+	protected long time = 0;
 
 	protected boolean compare(boolean expr) {
 		comparisons++;
@@ -34,6 +35,9 @@ public abstract class SortingAlgorithm {
 
 	// Write an array of integers into a file
 	public void writeToFile(int[] array, String fileName) {
+		if(array.length == 0)
+			return;
+
 		try(BufferedWriter fileWriter = new BufferedWriter(new FileWriter(fileName))) {
 			// Write every number except the last
 			for(int i = 0; i < array.length - 1; i++) {
