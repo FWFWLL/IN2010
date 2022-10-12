@@ -27,27 +27,31 @@ public abstract class SortingAlgorithm {
 		swaps++;
 	}
 
-	protected void insertInto(int[] array, int a, int b) {
-		array[a] = b;
+	protected void insertInto(int[] array, int insertionIndex, int elementToInsert) {
+		array[insertionIndex] = elementToInsert;
 
 		swaps++;
 	}
 
 	// Write an array of integers into a file
 	public void writeToFile(int[] array, String fileName) {
+		// Don't do anything if array is empty
 		if(array.length == 0)
 			return;
 
+		// Use try-with-resources to write array into a file
 		try(BufferedWriter fileWriter = new BufferedWriter(new FileWriter(fileName))) {
-			// Write every number except the last
+			// Write every number except the last with a newline
 			for(int i = 0; i < array.length - 1; i++) {
 				fileWriter.write(array[i] + "");
 				fileWriter.newLine();
 			}
 
-			// Write the last without a newline
+			// Write the last line without a newline
 			fileWriter.write(array[array.length - 1] + "");
-		} catch(IOException e) {}
+		} catch(IOException e) {
+			System.err.println("Could not write to file");
+		}
 	}
 
 	public abstract void sort(int[] array);
