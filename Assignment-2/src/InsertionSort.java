@@ -18,9 +18,9 @@ public final class InsertionSort extends SortingAlgorithm {
 		long time = (System.nanoTime() - t) / 1000;
 
 		System.out.println("InsertionSort:");
-		System.out.println("\tTime: " + time + "ms");
 		System.out.println("\tComparisons: " + comparisons);
 		System.out.println("\tSwaps: " + swaps);
+		System.out.println("\tTime: " + time + "ms");
 
 		writeToFile(array, inputFileName + "_insertion.out");
 	}
