@@ -3,6 +3,10 @@ JC := javac
 BUILDDIR := build
 SRCDIR := src
 
+# Default arguments
+INPUT := test/random_10
+EXERCISE := 1
+
 .PHONY: all clean run
 
 all: $(SRCDIR)/*.java | $(BUILDDIR)
@@ -11,8 +15,8 @@ all: $(SRCDIR)/*.java | $(BUILDDIR)
 clean:
 	@rm -rv $(BUILDDIR) test/*.out test/*.csv
 
-run: all $(INPUT)
-	@java -classpath $(BUILDDIR) Main $(INPUT)
+run: all
+	@java -classpath $(BUILDDIR) Main $(INPUT) $(EXERCISE)
 
 $(BUILDDIR):
 	@mkdir -p $@

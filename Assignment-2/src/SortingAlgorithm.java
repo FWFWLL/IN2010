@@ -34,21 +34,19 @@ public abstract class SortingAlgorithm {
 	}
 
 	// Write an array of integers into a file
-	public void writeToFile(int[] array, String fileName) {
+	public void writeToFile(int[] array, String filepath) {
 		// Don't do anything if array is empty
 		if(array.length == 0)
 			return;
 
 		// Use try-with-resources to write array into a file
-		try(BufferedWriter fileWriter = new BufferedWriter(new FileWriter(fileName))) {
+		try(BufferedWriter fw = new BufferedWriter(new FileWriter(filepath))) {
 			// Write every number except the last with a newline
-			for(int i = 0; i < array.length - 1; i++) {
-				fileWriter.write(array[i] + "");
-				fileWriter.newLine();
-			}
+			for(int i = 0; i < array.length - 1; i++)
+				fw.write(array[i] + "\n");
 
 			// Write the last line without a newline
-			fileWriter.write(array[array.length - 1] + "");
+			fw.write(array[array.length - 1] + "");
 		} catch(IOException e) {
 			System.err.println("Could not write to file");
 		}
