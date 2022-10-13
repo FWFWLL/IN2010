@@ -22,18 +22,6 @@ public abstract class SortingAlgorithm {
 		swaps++;
 	}
 
-	protected void insert(int[] array, int i, int j) {
-		array[i] = array[j];
-
-		swaps++;
-	}
-
-	protected void insertInto(int[] array, int insertionIndex, int elementToInsert) {
-		array[insertionIndex] = elementToInsert;
-
-		swaps++;
-	}
-
 	// Write an array of integers into a file
 	public void writeToFile(int[] array, String filepath) {
 		// Don't do anything if array is empty

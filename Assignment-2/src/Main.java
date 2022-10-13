@@ -9,7 +9,6 @@ public final class Main {
 	private static final int MAX_N_FOR_SLOW_ALGORITHMS = 65535;
 	private static final int TIME_LIMIT = 7000; // ms
 
-
 	public static void main(String[] args) throws IOException {
 		if(args.length < 2) {
 			System.err.println("Missing arguments");
@@ -34,10 +33,10 @@ public final class Main {
 		// QuickSort causes a stack overflow
 		if(args[1].equals("1"))
 			if(array.length > MAX_N_FOR_SLOW_ALGORITHMS)
-				algorithms[2].sortToFile(array, filepath);
+				algorithms[2].sortToFile(array.clone(), filepath);
 			else
 				for(SortingAlgorithm algo : algorithms)
-					algo.sortToFile(array, filepath);
+					algo.sortToFile(array.clone(), filepath);
 
 		if(!args[1].equals("2"))
 			return;

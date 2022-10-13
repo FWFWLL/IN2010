@@ -1,14 +1,18 @@
 public final class InsertionSort extends SortingAlgorithm {
 	public void sort(int[] array) {
-		for(int step = 1; step < array.length; step++) {
+		int size = array.length;
+
+		for(int step = 1; step < size; step++) {
 			int key = array[step];
-			int j  = step - 1;
+			int i = step - 1;
 
 			// NOTE: Logical AND goes left -> right in Java
-			while(j >= 0 && compare(key < array[j]))
-				insert(array, j + 1, j--);
+			while(i >= 0 && compare(key < array[i]))
+				array[i + 1] = array[i--];
 
-			insertInto(array, j + 1, key);
+			array[i + 1] = key;
+
+			swaps++;
 		}
 	}
 
