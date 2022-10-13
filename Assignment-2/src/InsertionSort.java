@@ -6,9 +6,9 @@ public final class InsertionSort extends SortingAlgorithm {
 
 			// NOTE: Logical AND goes left -> right in Java
 			while(j >= 0 && compare(key < array[j]))
-				insert(array, j + 1, j--);
+				insert(array, ++j, j--);
 
-			insertInto(array, j + 1, key);
+			insertInto(array, ++j, key);
 		}
 	}
 
