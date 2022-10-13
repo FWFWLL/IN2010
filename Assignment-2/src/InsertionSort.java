@@ -13,9 +13,7 @@ public final class InsertionSort extends SortingAlgorithm {
 	}
 
 	public void sortToFile(int[] array, String inputFileName) {
-		long t = System.nanoTime();
-		sort(array);
-		long time = (System.nanoTime() - t) / 1000;
+		long time = sortTimed(array);
 
 		System.out.println("InsertionSort:");
 		System.out.println("\tComparisons: " + comparisons);

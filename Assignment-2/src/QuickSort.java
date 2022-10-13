@@ -42,9 +42,7 @@ public final class QuickSort extends SortingAlgorithm {
 
 	// Method to sort the file and write sorted array to a file
 	public void sortToFile(int[] array, String inputFileName) {
-		long t = System.nanoTime();
-		sort(array);
-		long time = (System.nanoTime() - t) / 1000;
+		long time = sortTimed(array);
 
 		System.out.println("QuickSort:");
 		System.out.println("\tComparisons: " + comparisons);

@@ -6,15 +6,21 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 
 public final class Main {
+	private static final int MAX_N_FOR_SLOW_ALGORITHMS = 65535;
+	private static final int TIME_LIMIT = 7000; // ms
+
+
 	public static void main(String[] args) throws IOException {
 		if(args.length < 2) {
 			System.err.println("Missing arguments");
 			return;
 		}
 
-		int[] array = Files.readAllLines(Paths.get(args[0]))
+		String filepath = args[0];
+
+		int[] array = Files.readAllLines(Paths.get(filepath))
 			.stream()
-			.mapToInt(i -> Integer.parseInt(i))
+			.mapToInt(Integer::parseInt)
 			.toArray();
 
 		SortingAlgorithm[] algorithms = {
@@ -24,14 +30,19 @@ public final class Main {
 			new QuickSort(),     // O(n^2)
 		};
 
+		// MergeSort is the only one that can actually sort arrays greater than 100000
+		// QuickSort causes a stack overflow
 		if(args[1].equals("1"))
-			for(SortingAlgorithm algo : algorithms)
-				algo.sortToFile(array, args[0]);
+			if(array.length > MAX_N_FOR_SLOW_ALGORITHMS)
+				algorithms[2].sortToFile(array, filepath);
+			else
+				for(SortingAlgorithm algo : algorithms)
+					algo.sortToFile(array, filepath);
 
 		if(!args[1].equals("2"))
 			return;
 
-		File csvOutputFile = new File(args[0] + "_results.csv");
+		File csvOutputFile = new File(filepath + "_results.csv");
 		try(PrintWriter pw = new PrintWriter(csvOutputFile)) {
 			// First line
 			pw.println("n,bubble_cmp,bubble_swaps,bubble_time,insertion_cmp,insertion_swaps,insertion_time,merge_cmp,merge_swaps,merge_time,quick_cmp,quick_swaps,quick_time,");
@@ -41,12 +52,21 @@ public final class Main {
 
 				for(SortingAlgorithm algo : algorithms) {
 					// Measure time of completion of the algorithm
-					long t = System.nanoTime();
-					algo.sort(Arrays.copyOfRange(array, 0, n));
-					long time = (System.nanoTime() - t) / 1000;
+					long time = 0;
+
+					// Start sorting as long as algorithm isn't timed out
+					if(!algo.timedOut)
+						time = algo.sortTimed(Arrays.copyOfRange(array, 0, n));
+
+					// Tell algorithm to chill if time exceeded
+					if(time > TIME_LIMIT)
+						algo.timedOut = true;
 
 					// Print out statistics of algorithm
-					pw.print(algo.comparisons + "," + algo.swaps + "," + time + ",");
+					if(algo.timedOut)
+						pw.print(" , , ,");
+					else
+						pw.print(algo.comparisons + "," + algo.swaps + "," + time + ",");
 				}
 
 				pw.println();

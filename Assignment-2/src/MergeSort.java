@@ -60,9 +60,7 @@ public final class MergeSort extends SortingAlgorithm {
 	}
 
 	public void sortToFile(int[] array, String inputFileName) {
-		long t = System.nanoTime();
-		sort(array);
-		long time = (System.nanoTime() - t) / 1000;
+		long time = sortTimed(array);
 
 		System.out.println("MergeSort:");
 		System.out.println("\tComparisons: " + comparisons);

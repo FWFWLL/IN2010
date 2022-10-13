@@ -3,9 +3,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public abstract class SortingAlgorithm {
-	protected int comparisons = 0;
-	protected int swaps = 0;
-	protected long time = 0;
+	protected long comparisons = 0;
+	protected long swaps = 0;
+
+	protected boolean timedOut = false;
 
 	protected boolean compare(boolean expr) {
 		comparisons++;
@@ -13,16 +14,16 @@ public abstract class SortingAlgorithm {
 		return expr;
 	}
 
-	protected void swap(int[] array, int a, int b) {
-		int temp = array[a];
-		array[a] = array[b];
-		array[b] = temp;
+	protected void swap(int[] array, int i, int j) {
+		int temp = array[i];
+		array[i] = array[j];
+		array[j] = temp;
 
 		swaps++;
 	}
 
-	protected void insert(int[] array, int a, int b) {
-		array[a] = array[b];
+	protected void insert(int[] array, int i, int j) {
+		array[i] = array[j];
 
 		swaps++;
 	}
@@ -53,5 +54,14 @@ public abstract class SortingAlgorithm {
 	}
 
 	public abstract void sort(int[] array);
+
+	public long sortTimed(int[] array) {
+		long t = System.nanoTime();
+		sort(array);
+		long time = (System.nanoTime() - t) / 1000;
+
+		return time;
+	}
+
 	public abstract void sortToFile(int[] array, String inputFileName);
 }
