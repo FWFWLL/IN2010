@@ -5,7 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
 
-public final class Main {
+public class Main {
 	private static final int MAX_N_FOR_SLOW_ALGORITHMS = 65535;
 	private static final int TIME_LIMIT = 7000; // ms
 
