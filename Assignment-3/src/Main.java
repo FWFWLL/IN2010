@@ -16,6 +16,7 @@ public class Main {
 	private final static String SUCCESS = "\033[0;92m";
 	private final static String FAILURE = "\033[0;31m";
 	private final static String NUMBERS = "\033[0;33m";
+
 	private final static String HIDE_CURSOR = "\u001B[?25l";
 	private final static String SHOW_CURSOR = "\u001B[?25h";
 
@@ -112,7 +113,7 @@ public class Main {
 
 				actor.getMovieAppearances().forEach((movieId) -> {
 					actors.forEach((innerId, innerActor) -> {
-						if(id != innerId && movies.containsKey(movieId) && innerActor.getMovieAppearances().contains(movieId)) {
+						if(!id.equals(innerId) && movies.containsKey(movieId) && innerActor.getMovieAppearances().contains(movieId)) {
 							syncGraph.get(actor).add(innerActor);
 						}
 					});
