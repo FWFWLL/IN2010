@@ -4,7 +4,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -13,16 +12,34 @@ import java.util.List;
 import java.util.Map;
 
 public class Main {
-	public static void main(String[] args) throws IOException {
-		OutputStream stdout = new BufferedOutputStream(System.out);
+	private final static String RESET = "\033[0m";
+	private final static String SUCCESS = "\033[0;92m";
+	private final static String FAILURE = "\033[0;31m";
+	private final static String NUMBERS = "\033[0;33m";
+	private final static String HIDE_CURSOR = "\u001B[?25l";
+	private final static String SHOW_CURSOR = "\u001B[?25h";
 
-		Map<Actor, List<Actor>> graph = new HashMap<Actor, List<Actor>>();
-		Map<Actor, List<Actor>> syncGraph = Collections.synchronizedMap(graph);
+	private final static String CACHE_FILEPATH = "cache.ffl";
+	private final static String MOVIES_FILEPATH = "tsv/movies.tsv";
+	private final static String ACTORS_FILEPATH = "tsv/actors.tsv";
 
-		System.out.print("Reading movies.tsv...");
+	private static Map<Actor, List<Actor>> graph = new HashMap<Actor, List<Actor>>();
+	private static Map<Actor, List<Actor>> syncGraph = Collections.synchronizedMap(graph);
+	private static Map<String, Movie> movies = new HashMap<String, Movie>();
+	private static Map<String, Actor> actors = new HashMap<String, Actor>();
 
-		Map<String, Movie> movies = new HashMap<String, Movie>();
-		try(BufferedReader br = new BufferedReader(new FileReader("tsv/movies.tsv"))) {
+	public static void main(String[] args) throws Exception {
+		readMoviesTSV(MOVIES_FILEPATH);
+		readActorsTSV(ACTORS_FILEPATH);
+
+		buildGraph();
+		exercise1(graph);
+	}
+
+	public static void readMoviesTSV(String filepath) throws Exception {
+		System.out.print("Reading " + filepath);
+
+		try(BufferedReader br = new BufferedReader(new FileReader(filepath))) {
 			for(String line = br.readLine(); line != null; line = br.readLine()) {
 				String[] fields = line.trim().split("\t");
 
@@ -30,12 +47,13 @@ public class Main {
 			}
 		}
 
-		System.out.println(" Finished");
+		System.out.println(SUCCESS + " DONE" + RESET);
+	}
 
-		System.out.print("Reading actors.tsv...");
+	public static void readActorsTSV(String filepath) throws Exception {
+		System.out.print("Reading " + filepath);
 
-		Map<String, Actor> actors = new HashMap<String, Actor>();
-		try(BufferedReader br = new BufferedReader(new FileReader("tsv/actors.tsv"))) {
+		try(BufferedReader br = new BufferedReader(new FileReader(filepath))) {
 			for(String line = br.readLine(); line != null; line = br.readLine()) {
 				String[] fields = line.trim().split("\t");
 				Actor actor = new Actor(fields[0], fields[1]);
@@ -47,15 +65,22 @@ public class Main {
 			}
 		}
 
-		System.out.println(" Finished");
-			
-		System.out.print("cache.ffl...");
+		System.out.println(SUCCESS + " DONE" + RESET);
+	}
+	
+	// Generates our Graph
+	// If cache file is found, populate graph based on cache file content
+	// Otherwise generate the Graph using our algorithm
+	public static void buildGraph() throws Exception {	
+		OutputStream stdout = new BufferedOutputStream(System.out);
 
-		File file = new File("cache.ffl");
+		System.out.print(CACHE_FILEPATH + "...");
+
+		File file = new File(CACHE_FILEPATH);
 		if(file.exists() && !file.isDirectory()) {
-			System.out.println(" Found");
+			System.out.println(SUCCESS + " FOUND" + RESET);
 
-			System.out.print("Populating Graph...");
+			System.out.print("Populating Graph...\r");
 
 			try(BufferedReader br = new BufferedReader(new FileReader(file))) {
 				for(String line = br.readLine(); line != null; line = br.readLine()) {
@@ -67,15 +92,18 @@ public class Main {
 
 					for(int i = 1; i < actorIds.length; i++)
 						graph.get(actor).add(actors.get(actorIds[i]));
+
+					stdout.write(String.format("Generating Graph... (%s%6d%s/%s%d%s) \r", NUMBERS, graph.size(), RESET, NUMBERS, actors.size(), RESET).getBytes());
 				}
 			} catch(Exception e) {}
 
-			System.out.println(" Finished");
+			System.out.print("Populating Graph..." + SUCCESS + " DONE" + RESET + "           \n" + SHOW_CURSOR);
 		} else {
-			System.out.println(" Not Found");
+			System.out.println(FAILURE + " NOT FOUND" + RESET);
 
-			// System.out.print("Generating Graph...");
+			System.out.print("Generating Graph...\r" + HIDE_CURSOR);
 
+			// This algorithm is O(k * n^2)... 💀
 			actors.entrySet().parallelStream().forEach(entry -> {
 				String id = entry.getKey();
 				Actor actor = entry.getValue();
@@ -90,35 +118,38 @@ public class Main {
 					});
 				});
 
-				try {stdout.write(("(" + graph.size() + ") -> Node(" + id + ") - Edges(" + syncGraph.get(actor).size() +  ") -> " + actor.getName() +  "\n").getBytes());}
-				catch(Exception e) {}
-			});
-
-			// System.out.println(" Finished");
-
-			System.out.print("Generating cache.ffl...");
-
-			BufferedWriter fw = new BufferedWriter(new FileWriter("cache.ffl"));
-			graph.forEach((node, neighbours) -> {
 				try {
-					fw.write(node.getId());
-
-					for(Actor actor : neighbours)
-						fw.write(" " + actor.getId());
-
-					fw.newLine();
+					stdout.write(String.format("Generating Graph... (%s%6d%s/%s%d%s) \r", NUMBERS, graph.size(), RESET, NUMBERS, actors.size(), RESET).getBytes());
 				} catch(Exception e) {}
 			});
 
-			System.out.println(" Finished");
+			System.out.print("Generating Graph..." + SUCCESS + " DONE" + RESET + "           \n" + SHOW_CURSOR);
 
-			fw.close();
+			generateCacheFile(CACHE_FILEPATH);
 		}
+	}
 
-		// System.out.println("Finished creating Graph")
+	public static void generateCacheFile(String filepath) throws Exception {
+		System.out.print("Generating " + filepath);
 
-		// System.out.println("Finished creating cache.ffl");
+		BufferedWriter fw = new BufferedWriter(new FileWriter(filepath));
+		graph.forEach((node, neighbours) -> {
+			try {
+				fw.write(node.getId());
 
+				for(Actor actor : neighbours)
+				fw.write(" " + actor.getId());
+
+				fw.newLine();
+			} catch(Exception e) {}
+		});
+
+		fw.close();
+
+		System.out.println(SUCCESS + " DONE" + RESET);
+	}
+
+	public static void exercise1(Map<Actor, List<Actor>> graph) {
 		int numNodes = graph.size();
 		int numEdges = 0;
 
@@ -127,8 +158,8 @@ public class Main {
 
 		numEdges /= 2;
 
-		System.out.println("\nExercise 1:\n");
-		System.out.println("Nodes: " + numNodes);
-		System.out.println("Edges: " + numEdges);
+		System.out.println("\nExercise " + NUMBERS + "1" + RESET + ":\n");
+		System.out.println("Nodes: " + NUMBERS + numNodes + RESET);
+		System.out.println("Edges: " + NUMBERS + numEdges + RESET);
 	}
 }
