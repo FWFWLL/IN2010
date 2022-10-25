@@ -37,7 +37,7 @@ public class Main {
 		exercise1(graph);
 	}
 
-	public static void readMoviesTSV(String filepath) throws Exception {
+	private static void readMoviesTSV(String filepath) throws Exception {
 		System.out.print("Reading " + filepath);
 
 		try(BufferedReader br = new BufferedReader(new FileReader(filepath))) {
@@ -51,7 +51,7 @@ public class Main {
 		System.out.println(SUCCESS + " DONE" + RESET);
 	}
 
-	public static void readActorsTSV(String filepath) throws Exception {
+	private static void readActorsTSV(String filepath) throws Exception {
 		System.out.print("Reading " + filepath);
 
 		try(BufferedReader br = new BufferedReader(new FileReader(filepath))) {
@@ -72,7 +72,7 @@ public class Main {
 	// Generates our Graph
 	// If cache file is found, populate graph based on cache file content
 	// Otherwise generate the Graph using our algorithm
-	public static void buildGraph() throws Exception {	
+	private static void buildGraph() throws Exception {	
 		OutputStream stdout = new BufferedOutputStream(System.out);
 
 		System.out.print(CACHE_FILEPATH + "...");
@@ -130,7 +130,7 @@ public class Main {
 		}
 	}
 
-	public static void generateCacheFile(String filepath) throws Exception {
+	private static void generateCacheFile(String filepath) throws Exception {
 		System.out.print("Generating " + filepath);
 
 		BufferedWriter fw = new BufferedWriter(new FileWriter(filepath));
@@ -150,7 +150,7 @@ public class Main {
 		System.out.println(SUCCESS + " DONE" + RESET);
 	}
 
-	public static void exercise1(Map<Actor, List<Actor>> graph) {
+	private static void exercise1(Map<Actor, List<Actor>> graph) {
 		int numNodes = graph.size();
 		int numEdges = 0;
 
