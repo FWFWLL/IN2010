@@ -8,8 +8,14 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
+import java.util.Set;
+import java.util.Stack;
+import java.util.stream.Collectors;
 
 public class Main {
 	private final static String RESET = "\033[0m";
@@ -25,16 +31,20 @@ public class Main {
 	private final static String ACTORS_FILEPATH = "tsv/actors.tsv";
 
 	private static Map<Actor, List<Actor>> graph = new HashMap<Actor, List<Actor>>();
-	private static Map<Actor, List<Actor>> syncGraph = Collections.synchronizedMap(graph);
 	private static Map<String, Movie> movies = new HashMap<String, Movie>();
 	private static Map<String, Actor> actors = new HashMap<String, Actor>();
 
 	public static void main(String[] args) throws Exception {
+		Map<Actor, List<Actor>> syncGraph = Collections.synchronizedMap(graph);
+
 		readMoviesTSV(MOVIES_FILEPATH);
 		readActorsTSV(ACTORS_FILEPATH);
 
-		buildGraph();
+		buildGraph(syncGraph);
+
 		exercise1(graph);
+		exercise2(graph);
+		exercise3(graph);
 	}
 
 	private static void readMoviesTSV(String filepath) throws Exception {
@@ -72,7 +82,7 @@ public class Main {
 	// Generates our Graph
 	// If cache file is found, populate graph based on cache file content
 	// Otherwise generate the Graph using our algorithm
-	private static void buildGraph() throws Exception {	
+	private static void buildGraph(Map<Actor, List<Actor>> syncGraph) throws Exception {	
 		OutputStream stdout = new BufferedOutputStream(System.out);
 
 		System.out.print(CACHE_FILEPATH + "...");
@@ -130,6 +140,8 @@ public class Main {
 		}
 	}
 
+	// Generate a cache file of our Graph
+	// Sparing us from having to generate the Graph every runtime
 	private static void generateCacheFile(String filepath) throws Exception {
 		System.out.print("Generating " + filepath);
 
@@ -150,6 +162,7 @@ public class Main {
 		System.out.println(SUCCESS + " DONE" + RESET);
 	}
 
+	// Exercise 1 driver code
 	private static void exercise1(Map<Actor, List<Actor>> graph) {
 		int numNodes = graph.size();
 		int numEdges = 0;
@@ -162,5 +175,112 @@ public class Main {
 		System.out.println("\nExercise " + NUMBERS + "1" + RESET + ":\n");
 		System.out.println("Nodes: " + NUMBERS + numNodes + RESET);
 		System.out.println("Edges: " + NUMBERS + numEdges + RESET);
+	}
+	
+	// Prints the shortest path between two actors
+	// While printing a Movie that connects them both
+	private static void printShortestPath(Map<Actor, List<Actor>> graph, String srcActorId, String dstActorId) {
+		Actor srcActor = actors.get(srcActorId);
+		Actor dstActor = actors.get(dstActorId);
+
+		Map<Actor, Actor> predecessors = new HashMap<Actor, Actor>();
+
+		if(!BFS(graph, srcActor, dstActor, predecessors)) {
+			System.out.println("Given source and destination are not connected");
+
+			return;
+		}
+
+		Stack<Actor> path = new Stack<Actor>();
+		Actor crawl = dstActor;
+		path.push(crawl);
+		while(predecessors.get(crawl) != null) {
+			path.push(predecessors.get(crawl));
+			crawl = predecessors.get(crawl);
+		}
+
+		Actor prev = path.pop();
+		System.out.println("\n" + prev.getName());
+
+		while(!path.empty()) {
+			Actor curr = path.pop();
+
+			Set<Movie> prevMovies = prev.getMovieAppearances()
+				.stream()
+				.map((movieId) -> movies.get(movieId))
+				.collect(Collectors.toCollection(HashSet::new));
+
+			Set<Movie> currMovies = curr.getMovieAppearances()
+				.stream()
+				.map((movieId) -> movies.get(movieId))
+				.collect(Collectors.toCollection(HashSet::new));
+
+			Movie commonMovie = findCommonMovies(prevMovies, currMovies)
+				.iterator()
+				.next();
+
+			System.out.printf("====[ %s (%s%.1f%s) ]===> %s\n", commonMovie.getTitle(), NUMBERS, commonMovie.getRating(), RESET, curr.getName());
+
+			prev = curr;
+		}
+	}
+
+	// Modified version of Breath-First-Search that stores predecessors
+	private static boolean BFS(Map<Actor, List<Actor>> graph, Actor srcActor, Actor dstActor, Map<Actor, Actor> predecessors) {
+		Queue<Actor> queue = new LinkedList<Actor>();
+		Map<Actor, Boolean> visited = new HashMap<Actor, Boolean>();
+
+		for(Actor actor : graph.keySet()) {
+			visited.put(actor, false);
+			predecessors.put(actor, null);
+		}
+
+		visited.put(srcActor, true);
+		queue.offer(srcActor);
+
+		while(!queue.isEmpty()) {
+			Actor actor = queue.poll();
+
+			for(Actor curr : graph.get(actor)) {
+				if(!visited.get(curr)) {
+					visited.put(curr, true);
+					predecessors.put(curr, actor);
+					queue.offer(curr);
+
+					if(curr == dstActor)
+						return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
+	// Helper function for finding common movies in two sets
+	private static Set<Movie> findCommonMovies(Set<Movie> setA, Set<Movie> setB) {
+		Set<Movie> results = new HashSet<Movie>();
+
+		for(Movie movie : setA) {
+			if(setB.contains(movie)) {
+				results.add(movie);
+			}
+		}
+
+		return results;
+	}
+
+	// Exercise 2 driver code
+	private static void exercise2(Map<Actor, List<Actor>> graph) {
+		System.out.println("\nExercise " + NUMBERS + "2" + RESET + ":");
+		printShortestPath(graph, "nm2255973", "nm0000460");
+		printShortestPath(graph, "nm0424060", "nm0000243");
+		printShortestPath(graph, "nm4689420", "nm0000365");
+		printShortestPath(graph, "nm0000288", "nm0001401");
+		printShortestPath(graph, "nm0031483", "nm0931324");
+	}
+
+	// Exercise 3 driver code
+	private static void exercise3(Map<Actor, List<Actor>> graph) {
+		System.out.println("\nExercise " + NUMBERS + "3" + RESET + ":\n");
 	}
 }
