@@ -31,6 +31,7 @@ public class Main {
 	private final static String ACTORS_FILEPATH = "tsv/actors.tsv";
 
 	private static Map<Actor, List<Actor>> graph = new HashMap<Actor, List<Actor>>();
+
 	private static Map<String, Movie> movies = new HashMap<String, Movie>();
 	private static Map<String, Actor> actors = new HashMap<String, Actor>();
 
