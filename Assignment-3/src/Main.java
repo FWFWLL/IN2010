@@ -30,10 +30,10 @@ public class Main {
 	private final static String MOVIES_FILEPATH = "tsv/movies.tsv";
 	private final static String ACTORS_FILEPATH = "tsv/actors.tsv";
 
-	private static Map<Actor, List<Actor>> graph = new HashMap<Actor, List<Actor>>();
+	private static Map<Actor, List<Actor>> graph = new HashMap<>();
 
-	private static Map<String, Movie> movies = new HashMap<String, Movie>();
-	private static Map<String, Actor> actors = new HashMap<String, Actor>();
+	private static Map<String, Movie> movies = new HashMap<>();
+	private static Map<String, Actor> actors = new HashMap<>();
 
 	public static void main(String[] args) throws Exception {
 		Map<Actor, List<Actor>> syncGraph = Collections.synchronizedMap(graph);
@@ -100,7 +100,7 @@ public class Main {
 
 					Actor actor = actors.get(actorIds[0]);
 
-					graph.put(actor, new ArrayList<Actor>());
+					graph.put(actor, new ArrayList<>());
 
 					for(int i = 1; i < actorIds.length; i++)
 						graph.get(actor).add(actors.get(actorIds[i]));
@@ -120,7 +120,7 @@ public class Main {
 				String id = entry.getKey();
 				Actor actor = entry.getValue();
 
-				syncGraph.put(actor, Collections.synchronizedList(new ArrayList<Actor>()));
+				syncGraph.put(actor, Collections.synchronizedList(new ArrayList<>()));
 
 				actor.getMovieAppearances().forEach((movieId) -> {
 					actors.forEach((innerId, innerActor) -> {
@@ -184,7 +184,7 @@ public class Main {
 		Actor srcActor = actors.get(srcActorId);
 		Actor dstActor = actors.get(dstActorId);
 
-		Map<Actor, Actor> predecessors = new HashMap<Actor, Actor>();
+		Map<Actor, Actor> predecessors = new HashMap<>();
 
 		if(!BFS(graph, srcActor, dstActor, predecessors)) {
 			System.out.println("Given source and destination are not connected");
@@ -192,7 +192,7 @@ public class Main {
 			return;
 		}
 
-		Stack<Actor> path = new Stack<Actor>();
+		Stack<Actor> path = new Stack<>();
 		Actor crawl = dstActor;
 		path.push(crawl);
 		while(predecessors.get(crawl) != null) {
@@ -228,8 +228,8 @@ public class Main {
 
 	// Modified version of Breath-First-Search that stores predecessors
 	private static boolean BFS(Map<Actor, List<Actor>> graph, Actor srcActor, Actor dstActor, Map<Actor, Actor> predecessors) {
-		Queue<Actor> queue = new LinkedList<Actor>();
-		Map<Actor, Boolean> visited = new HashMap<Actor, Boolean>();
+		Queue<Actor> queue = new LinkedList<>();
+		Map<Actor, Boolean> visited = new HashMap<>();
 
 		for(Actor actor : graph.keySet()) {
 			visited.put(actor, false);
@@ -259,7 +259,7 @@ public class Main {
 
 	// Helper function for finding common movies in two sets
 	private static Set<Movie> findCommonMovies(Set<Movie> setA, Set<Movie> setB) {
-		Set<Movie> results = new HashSet<Movie>();
+		Set<Movie> results = new HashSet<>();
 
 		for(Movie movie : setA) {
 			if(setB.contains(movie)) {
