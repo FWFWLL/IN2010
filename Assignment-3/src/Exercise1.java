@@ -23,10 +23,6 @@ public final class Exercise1 extends Exercise {
 			generateCacheFile(CACHE_FILEPATH);
 		}
 
-		printOutput();
-	}
-
-	private static void printOutput() {
 		int numNodes = graph.size();
 		int numEdges = 0;
 

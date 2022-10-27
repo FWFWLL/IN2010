@@ -11,20 +11,18 @@ public final class Exercise3 extends Exercise {
 	private final static float MAX_RATING = 10.0f;
 
 	public static void run() {
-		printOutput();
-	}
-
-	private static void printOutput() {
 		System.out.println("\nExercise " + NUMBERS + "3" + RESET + ":");
 		printBestPath("nm2255973", "nm0000460");
 		printBestPath("nm0424060", "nm0000243");
 		printBestPath("nm4689420", "nm0000365");
 		printBestPath("nm0000288", "nm0001401");
 		printBestPath("nm0031483", "nm0931324");
-	}	
+	}
 
 	// Prints the shortest, weighted path between two Actors
 	private static void printBestPath(String srcActorId, String dstActorId) {
+		System.out.print("\nRunning Dijkstra...\r");
+
 		Actor srcActor = actors.get(srcActorId);
 		Actor dstActor = actors.get(dstActorId);
 
@@ -41,7 +39,7 @@ public final class Exercise3 extends Exercise {
 		}
 
 		Actor prev = path.pop();
-		System.out.println("\n" + prev.getName());
+		System.out.println(prev.getName() + "                   ");
 
 		while(!path.empty()) {
 			Actor curr = path.pop();

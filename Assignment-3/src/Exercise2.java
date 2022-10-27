@@ -6,10 +6,6 @@ import java.util.Stack;
 
 public final class Exercise2 extends Exercise {
 	public static void run() {
-		printOutput();
-	}
-
-	private static void printOutput() {
 		System.out.println("\nExercise " + NUMBERS + "2" + RESET + ":");
 		printShortestPath("nm2255973", "nm0000460");
 		printShortestPath("nm0424060", "nm0000243");
