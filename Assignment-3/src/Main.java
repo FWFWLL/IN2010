@@ -30,6 +30,8 @@ public class Main {
 	private final static String MOVIES_FILEPATH = "tsv/movies.tsv";
 	private final static String ACTORS_FILEPATH = "tsv/actors.tsv";
 
+	private final static float MAX_RATING = 10.0f;
+
 	private static Map<Actor, List<Actor>> graph = new HashMap<>();
 
 	private static Map<String, Movie> movies = new HashMap<>();
@@ -206,17 +208,7 @@ public class Main {
 		while(!path.empty()) {
 			Actor curr = path.pop();
 
-			Set<Movie> prevMovies = prev.getMovieAppearances()
-				.stream()
-				.map((movieId) -> movies.get(movieId))
-				.collect(Collectors.toCollection(HashSet::new));
-
-			Set<Movie> currMovies = curr.getMovieAppearances()
-				.stream()
-				.map((movieId) -> movies.get(movieId))
-				.collect(Collectors.toCollection(HashSet::new));
-
-			Movie commonMovie = findCommonMovies(prevMovies, currMovies)
+			Movie commonMovie = findCommonMovies(prev, curr)
 				.iterator()
 				.next();
 
@@ -257,9 +249,19 @@ public class Main {
 		return false;
 	}
 
-	// Helper function for finding common movies in two sets
-	private static Set<Movie> findCommonMovies(Set<Movie> setA, Set<Movie> setB) {
+	// Helper function for finding common movies between two Actors
+	private static Set<Movie> findCommonMovies(Actor actorA, Actor actorB) {
 		Set<Movie> results = new HashSet<>();
+
+		Set<Movie> setA = actorA.getMovieAppearances()
+			.stream()
+			.map((movieId) -> movies.get(movieId))
+			.collect(Collectors.toCollection(HashSet::new));
+
+		Set<Movie> setB = actorB.getMovieAppearances()
+			.stream()
+			.map((movieId) -> movies.get(movieId))
+			.collect(Collectors.toCollection(HashSet::new));
 
 		for(Movie movie : setA) {
 			if(setB.contains(movie)) {
