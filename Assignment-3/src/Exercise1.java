@@ -8,31 +8,25 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
-public class Exercise1 {
-	private final static String RESET = "\033[0m";
-	private final static String SUCCESS = "\033[0;92m";
-	private final static String FAILURE = "\033[0;31m";
-	private final static String NUMBERS = "\033[0;33m";
-
+public final class Exercise1 extends Exercise {
 	private final static String CACHE_FILEPATH = "cache.ffl";
 	private final static String MOVIES_FILEPATH = "tsv/movies.tsv";
 	private final static String ACTORS_FILEPATH = "tsv/actors.tsv";
 
-	public static void run(Map<Actor, List<Actor>> graph, Map<Actor, List<Actor>> syncGraph, Map<String, Movie> movies, Map<String, Actor> actors) throws Exception {
-		readMoviesTSV(movies, MOVIES_FILEPATH);
-		readActorsTSV(actors, ACTORS_FILEPATH);
+	public static void run() throws Exception {
+		readMoviesTSV(MOVIES_FILEPATH);
+		readActorsTSV(ACTORS_FILEPATH);
 
-		if(!populateGraph(graph, actors)) {
-			buildGraph(graph, syncGraph, movies, actors);
-			generateCacheFile(graph, CACHE_FILEPATH);
+		if(!populateGraph()) {
+			buildGraph();
+			generateCacheFile(CACHE_FILEPATH);
 		}
 
-		printOutput(graph);
+		printOutput();
 	}
 
-	private static void printOutput(Map<Actor, List<Actor>> graph) {
+	private static void printOutput() {
 		int numNodes = graph.size();
 		int numEdges = 0;
 
@@ -46,7 +40,7 @@ public class Exercise1 {
 		System.out.println("Edges: " + NUMBERS + numEdges + RESET);
 	}
 
-	private static void readMoviesTSV(Map<String, Movie> movies, String filepath) throws Exception {
+	private static void readMoviesTSV(String filepath) throws Exception {
 		System.out.print("Reading " + filepath);
 
 		try(BufferedReader br = new BufferedReader(new FileReader(filepath))) {
@@ -60,7 +54,7 @@ public class Exercise1 {
 		System.out.println(SUCCESS + " DONE" + RESET);
 	}
 
-	private static void readActorsTSV(Map<String, Actor> actors, String filepath) throws Exception {
+	private static void readActorsTSV(String filepath) throws Exception {
 		System.out.print("Reading " + filepath);
 
 		try(BufferedReader br = new BufferedReader(new FileReader(filepath))) {
@@ -80,7 +74,7 @@ public class Exercise1 {
 	
 	// If cache file is exists, populate graph based on cache file content
 	// Otherwise generate the Graph using our algorithm
-	private static boolean populateGraph(Map<Actor, List<Actor>> graph, Map<String, Actor> actors) {
+	private static boolean populateGraph() {
 		OutputStream stdout = new BufferedOutputStream(System.out);
 
 		System.out.print(CACHE_FILEPATH + "...");
@@ -117,7 +111,7 @@ public class Exercise1 {
 	}
 
 	// Generates our Graph
-	private static void buildGraph(Map<Actor, List<Actor>> graph, Map<Actor, List<Actor>> syncGraph, Map<String, Movie> movies, Map<String, Actor> actors) throws Exception {
+	private static void buildGraph() throws Exception {
 		OutputStream stdout = new BufferedOutputStream(System.out);
 
 		System.out.print("Generating Graph...\r");
@@ -147,7 +141,7 @@ public class Exercise1 {
 
 	// Generate a cache file of our Graph
 	// Sparing us from having to generate the Graph every runtime
-	private static void generateCacheFile(Map<Actor, List<Actor>> graph, String filepath) throws Exception {
+	private static void generateCacheFile(String filepath) throws Exception {
 		System.out.print("Generating " + filepath);
 
 		BufferedWriter fw = new BufferedWriter(new FileWriter(filepath));

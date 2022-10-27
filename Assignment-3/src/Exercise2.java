@@ -1,36 +1,32 @@
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Stack;
 
-public class Exercise2 {
-	private final static String RESET = "\033[0m";
-	private final static String NUMBERS = "\033[0;33m";
-
-	public static void run(Map<Actor, List<Actor>> graph, Map<String, Actor> actors) {
-		printOutput(graph, actors);
+public final class Exercise2 extends Exercise {
+	public static void run() {
+		printOutput();
 	}
 
-	private static void printOutput(Map<Actor, List<Actor>> graph, Map<String, Actor> actors) {
+	private static void printOutput() {
 		System.out.println("\nExercise " + NUMBERS + "2" + RESET + ":");
-		printShortestPath(graph, actors, "nm2255973", "nm0000460");
-		printShortestPath(graph, actors, "nm0424060", "nm0000243");
-		printShortestPath(graph, actors, "nm4689420", "nm0000365");
-		printShortestPath(graph, actors, "nm0000288", "nm0001401");
-		printShortestPath(graph, actors, "nm0031483", "nm0931324");
+		printShortestPath("nm2255973", "nm0000460");
+		printShortestPath("nm0424060", "nm0000243");
+		printShortestPath("nm4689420", "nm0000365");
+		printShortestPath("nm0000288", "nm0001401");
+		printShortestPath("nm0031483", "nm0931324");
 	}
 
 	// Prints the shortest path between two actors
 	// While printing a Movie that connects them both
-	private static void printShortestPath(Map<Actor, List<Actor>> graph, Map<String, Actor> actors, String srcActorId, String dstActorId) {
+	private static void printShortestPath(String srcActorId, String dstActorId) {
 		Actor srcActor = actors.get(srcActorId);
 		Actor dstActor = actors.get(dstActorId);
 
 		Map<Actor, Actor> predecessors = new HashMap<>();
 
-		if(!BFS(graph, srcActor, dstActor, predecessors)) {
+		if(!BFS(srcActor, dstActor, predecessors)) {
 			System.out.println("Given source and destination are not connected");
 
 			return;
@@ -50,7 +46,7 @@ public class Exercise2 {
 		while(!path.empty()) {
 			Actor curr = path.pop();
 
-			Movie commonMovie = Main.findCommonMovies(prev, curr)
+			Movie commonMovie = findCommonMovies(prev, curr)
 				.iterator()
 				.next();
 
@@ -61,7 +57,7 @@ public class Exercise2 {
 	}
 
 	// Modified version of Breath-First-Search that stores predecessors
-	private static boolean BFS(Map<Actor, List<Actor>> graph, Actor srcActor, Actor dstActor, Map<Actor, Actor> predecessors) {
+	private static boolean BFS(Actor srcActor, Actor dstActor, Map<Actor, Actor> predecessors) {
 		Queue<Actor> queue = new LinkedList<>();
 		Map<Actor, Boolean> visited = new HashMap<>();
 

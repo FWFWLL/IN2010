@@ -1,6 +1,5 @@
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
@@ -8,33 +7,30 @@ import java.util.PriorityQueue;
 import java.util.Set;
 import java.util.Stack;
 
-public class Exercise3 {
-	private final static String RESET = "\033[0m";
-	private final static String NUMBERS = "\033[0;33m";
+public final class Exercise3 extends Exercise {
+	private final static float MAX_RATING = 10.0f;
 
-	public final static float MAX_RATING = 10.0f;
-
-	public static void run(Map<Actor, List<Actor>> graph, Map<String, Actor> actors) {
-		printOutput(graph, actors);
+	public static void run() {
+		printOutput();
 	}
 
-	private static void printOutput(Map<Actor, List<Actor>> graph, Map<String, Actor> actors) {
+	private static void printOutput() {
 		System.out.println("\nExercise " + NUMBERS + "3" + RESET + ":");
-		printBestPath(graph, actors, "nm2255973", "nm0000460");
-		printBestPath(graph, actors, "nm0424060", "nm0000243");
-		printBestPath(graph, actors, "nm4689420", "nm0000365");
-		printBestPath(graph, actors, "nm0000288", "nm0001401");
-		printBestPath(graph, actors, "nm0031483", "nm0931324");
+		printBestPath("nm2255973", "nm0000460");
+		printBestPath("nm0424060", "nm0000243");
+		printBestPath("nm4689420", "nm0000365");
+		printBestPath("nm0000288", "nm0001401");
+		printBestPath("nm0031483", "nm0931324");
 	}	
 
 	// Prints the shortest, weighted path between two Actors
-	private static void printBestPath(Map<Actor, List<Actor>> graph, Map<String, Actor> actors, String srcActorId, String dstActorId) {
+	private static void printBestPath(String srcActorId, String dstActorId) {
 		Actor srcActor = actors.get(srcActorId);
 		Actor dstActor = actors.get(dstActorId);
 
 		Map<Actor, Actor> predecessors = new HashMap<>();
 
-		float totalDistance = dijkstra(graph, srcActor, dstActor, predecessors);
+		float totalDistance = dijkstra(srcActor, dstActor, predecessors);
 
 		Stack<Actor> path = new Stack<>();
 		Actor crawl = dstActor;
@@ -50,7 +46,7 @@ public class Exercise3 {
 		while(!path.empty()) {
 			Actor curr = path.pop();
 
-			Movie commonMovie = Main.findCommonMovies(prev, curr)
+			Movie commonMovie = findCommonMovies(prev, curr)
 				.stream()
 				.filter(Objects::nonNull)
 				.max(Comparator.comparing(Movie::getRating))
@@ -65,7 +61,7 @@ public class Exercise3 {
 	}
 
 	// BFS but harder, an implementation of lazy dijkstra's algorithm
-	private static float dijkstra(Map<Actor, List<Actor>> graph, Actor srcActor, Actor dstActor, Map<Actor, Actor> predecessors) {
+	private static float dijkstra(Actor srcActor, Actor dstActor, Map<Actor, Actor> predecessors) {
 		class Pair implements Comparable<Pair> {
 			private Actor key;
 			private Float value;
@@ -132,7 +128,7 @@ public class Exercise3 {
 	private static float calculateMinDistance(Actor actorA, Actor actorB) {
 		float highestRating = 0.0f;
 
-		Set<Movie> commonMovies = Main.findCommonMovies(actorA, actorB);
+		Set<Movie> commonMovies = findCommonMovies(actorA, actorB);
 
 		for(Movie movie : commonMovies) {
 			if(movie != null && movie.getRating() >= highestRating) {
