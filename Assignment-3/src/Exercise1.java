@@ -8,6 +8,8 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public final class Exercise1 extends Exercise {
 	private final static String CACHE_FILEPATH = "cache.ffl";
@@ -112,6 +114,8 @@ public final class Exercise1 extends Exercise {
 
 		System.out.print("Generating Graph...\r");
 
+		Map<Actor, List<Actor>> syncGraph = Collections.synchronizedMap(graph);
+
 		// This algorithm is O(k * n^2)... 💀
 		actors.entrySet().parallelStream().forEach(entry -> {
 			String id = entry.getKey();
@@ -119,12 +123,12 @@ public final class Exercise1 extends Exercise {
 
 			syncGraph.put(actor, Collections.synchronizedList(new ArrayList<>()));
 
-			actor.getMovieAppearances().forEach((movieId) -> {
-				actors.forEach((innerId, innerActor) -> {
-					if(!id.equals(innerId) && movies.containsKey(movieId) && innerActor.getMovieAppearances().contains(movieId)) {
-						syncGraph.get(actor).add(innerActor);
-					}
-				});
+			actors.forEach((innerId, innerActor) -> {
+				if(!id.equals(innerId)) {
+					Set<Movie> commonMovies = findCommonMovies(actor, innerActor);
+
+					commonMovies.forEach((movie) -> syncGraph.get(actor).add(innerActor));
+				}
 			});
 
 			try {

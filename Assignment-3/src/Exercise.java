@@ -1,4 +1,3 @@
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -13,7 +12,6 @@ public abstract class Exercise {
 	protected final static String NUMBERS = "\033[0;33m";
 
 	protected static Map<Actor, List<Actor>> graph = new HashMap<>();
-	protected static Map<Actor, List<Actor>> syncGraph = Collections.synchronizedMap(graph);
 	protected static Map<String, Movie> movies = new HashMap<>();
 	protected static Map<String, Actor> actors = new HashMap<>();
 
