@@ -31,7 +31,7 @@ public final class QuickSort extends SortingAlgorithm {
 			quickSort(array, low, pivot - 1);
 
 			// Recursive call on the right side
-			quickSort(array, pivot, high);
+			quickSort(array, pivot + 1, high);
 		}
 	}
 	
