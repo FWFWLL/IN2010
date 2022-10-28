@@ -15,6 +15,9 @@ public final class Exercise1 extends Exercise {
 	private final static String CACHE_FILEPATH = "cache.ffl";
 	private final static String MOVIES_FILEPATH = "tsv/movies.tsv";
 	private final static String ACTORS_FILEPATH = "tsv/actors.tsv";
+	// private final static String CACHE_FILEPATH = "marvel_cache.ffl";
+	// private final static String MOVIES_FILEPATH = "tsv/marvel_movies.tsv";
+	// private final static String ACTORS_FILEPATH = "tsv/marvel_actors.tsv";
 
 	public static void run() throws Exception {
 		readMoviesTSV(MOVIES_FILEPATH);
@@ -117,19 +120,17 @@ public final class Exercise1 extends Exercise {
 		Map<Actor, List<Actor>> syncGraph = Collections.synchronizedMap(graph);
 
 		// This algorithm is O(k * n^2)... 💀
-		actors.entrySet().parallelStream().forEach(entry -> {
-			String id = entry.getKey();
-			Actor actor = entry.getValue();
-
+		actors.values().parallelStream().forEach(actor -> {
 			syncGraph.put(actor, Collections.synchronizedList(new ArrayList<>()));
 
-			actors.forEach((innerId, innerActor) -> {
-				if(!id.equals(innerId)) {
-					Set<Movie> commonMovies = findCommonMovies(actor, innerActor);
+			for(Actor innerActor : actors.values()) {
+				if(actor == innerActor)
+					continue;
 
-					commonMovies.forEach((movie) -> syncGraph.get(actor).add(innerActor));
-				}
-			});
+				Set<Movie> commonMovies = findCommonMovies(actor, innerActor);
+
+				commonMovies.forEach(movie -> syncGraph.get(actor).add(innerActor));
+			}
 
 			try {
 				stdout.write(String.format("Generating Graph... (%s%6d%s/%s%d%s)\r", NUMBERS, graph.size(), RESET, NUMBERS, actors.size(), RESET).getBytes());

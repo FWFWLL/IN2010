@@ -30,6 +30,12 @@ public final class Exercise3 extends Exercise {
 
 		float totalDistance = dijkstra(srcActor, dstActor, predecessors);
 
+		if(totalDistance == -1) {
+			System.out.println("Given source and destination are not connected");
+
+			return;
+		}
+
 		Stack<Actor> path = new Stack<>();
 		Actor crawl = dstActor;
 		path.push(crawl);
@@ -103,6 +109,9 @@ public final class Exercise3 extends Exercise {
 			if(distances.get(index) < minDistance)
 				continue;
 
+			if(index == null)
+				break;
+
 			for(Actor curr : graph.get(index)) {
 				if(visited.get(curr))
 					continue;
@@ -120,7 +129,7 @@ public final class Exercise3 extends Exercise {
 				return distances.get(dstActor);
 		}
 
-		return MAX_RATING;
+		return -1;
 	}
 
 	private static float calculateMinDistance(Actor actorA, Actor actorB) {

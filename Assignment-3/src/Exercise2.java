@@ -23,7 +23,7 @@ public final class Exercise2 extends Exercise {
 		Map<Actor, Actor> predecessors = new HashMap<>();
 
 		if(!BFS(srcActor, dstActor, predecessors)) {
-			System.out.println("Given source and destination are not connected");
+			System.out.println("\nGiven source and destination are not connected");
 
 			return;
 		}
@@ -67,6 +67,9 @@ public final class Exercise2 extends Exercise {
 
 		while(!queue.isEmpty()) {
 			Actor actor = queue.poll();
+
+			if(actor == null)
+				break;
 
 			for(Actor curr : graph.get(actor)) {
 				if(!visited.get(curr)) {
