@@ -1,3 +1,5 @@
+import java.io.BufferedOutputStream;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -11,9 +13,11 @@ public abstract class Exercise {
 	protected final static String FAILURE = "\033[0;31m";
 	protected final static String NUMBERS = "\033[0;33m";
 
-	protected static Map<Actor, List<Actor>> graph = new HashMap<>();
-	protected static Map<String, Movie> movies = new HashMap<>();
-	protected static Map<String, Actor> actors = new HashMap<>();
+	protected final static OutputStream stdout = new BufferedOutputStream(System.out);
+
+	protected final static Map<Actor, List<Actor>> graph = new HashMap<>();
+	protected final static Map<String, Movie> movies = new HashMap<>();
+	protected final static Map<String, Actor> actors = new HashMap<>();
 
 	// Helper method for finding a set of movies shared between two Actors
 	public static Set<Movie> findCommonMovies(Actor actorA, Actor actorB) {

@@ -1,10 +1,8 @@
-import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -76,8 +74,6 @@ public final class Exercise1 extends Exercise {
 	// If cache file is exists, populate graph based on cache file content
 	// Otherwise generate the Graph using our algorithm
 	private static boolean populateGraph() {
-		OutputStream stdout = new BufferedOutputStream(System.out);
-
 		System.out.print(CACHE_FILEPATH + "...");
 
 		File file = new File(CACHE_FILEPATH);
@@ -113,8 +109,6 @@ public final class Exercise1 extends Exercise {
 
 	// Generates our Graph
 	private static void buildGraph() throws Exception {
-		OutputStream stdout = new BufferedOutputStream(System.out);
-
 		System.out.print("Generating Graph...\r");
 
 		Map<Actor, List<Actor>> syncGraph = Collections.synchronizedMap(graph);
