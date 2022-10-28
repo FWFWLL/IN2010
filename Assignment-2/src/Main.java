@@ -50,6 +50,9 @@ public class Main {
 				pw.print(n + ",");
 
 				for(SortingAlgorithm algo : algorithms) {
+					algo.swaps = 0;
+					algo.comparisons = 0;
+
 					// Measure time of completion of the algorithm
 					long time = 0;
 
