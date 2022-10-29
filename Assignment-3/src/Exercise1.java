@@ -10,28 +10,30 @@ import java.util.Map;
 import java.util.Set;
 
 public final class Exercise1 extends Exercise {
-	private final static String CACHE_FILEPATH = "cache.ffl";
+	private final static String CACHE_FILEPATH = ".cache/cache.ffl";
 	private final static String MOVIES_FILEPATH = "tsv/movies.tsv";
 	private final static String ACTORS_FILEPATH = "tsv/actors.tsv";
-	// private final static String CACHE_FILEPATH = "marvel_cache.ffl";
-	// private final static String MOVIES_FILEPATH = "tsv/marvel_movies.tsv";
-	// private final static String ACTORS_FILEPATH = "tsv/marvel_actors.tsv";
 
 	public static void run() throws Exception {
 		readMoviesTSV(MOVIES_FILEPATH);
 		readActorsTSV(ACTORS_FILEPATH);
 
+		// If populateGraph does not find a cache file, generate Graph and write to cache file
 		if(!populateGraph()) {
 			buildGraph();
 			generateCacheFile(CACHE_FILEPATH);
 		}
 
+		// Number of vertices in our Graph is the number of Keys in our Map
 		int numNodes = graph.size();
-		int numEdges = 0;
 
+		// Number of edges in our Graph is the accumulated size of all list Values
+		int numEdges = 0;
 		for(List<Actor> edges : graph.values())
 			numEdges += edges.size();
 
+		// Since we are using an adjacency list, we have duplicate edges for completeness
+		// Therefore we just halve our edge count
 		numEdges /= 2;
 
 		System.out.println("\nExercise " + NUMBERS + "1" + RESET + ":\n");
@@ -39,6 +41,7 @@ public final class Exercise1 extends Exercise {
 		System.out.println("Edges: " + NUMBERS + numEdges + RESET);
 	}
 
+	// Read movies.tsv file and insert into a Map using tt-id as Keys
 	private static void readMoviesTSV(String filepath) throws Exception {
 		System.out.print("Reading " + filepath);
 
@@ -53,6 +56,7 @@ public final class Exercise1 extends Exercise {
 		System.out.println(SUCCESS + " DONE" + RESET);
 	}
 
+	// Read actors.tsv file and insert into a Map using nm-id as Keys
 	private static void readActorsTSV(String filepath) throws Exception {
 		System.out.print("Reading " + filepath);
 
@@ -71,8 +75,7 @@ public final class Exercise1 extends Exercise {
 		System.out.println(SUCCESS + " DONE" + RESET);
 	}
 	
-	// If cache file is exists, populate graph based on cache file content
-	// Otherwise generate the Graph using our algorithm
+	// If cache file exists, populate graph based on cache file content
 	private static boolean populateGraph() {
 		System.out.print(CACHE_FILEPATH + "...");
 
@@ -107,22 +110,33 @@ public final class Exercise1 extends Exercise {
 		}
 	}
 
-	// Generates our Graph
+	// Generates our Graph from scratch
 	private static void buildGraph() throws Exception {
 		System.out.print("Generating Graph...\r");
 
+		// Since we are planning to insert on multiple threads
+		// We need to use a thread-safe implementation
+		// To prevent race conditions
 		Map<Actor, List<Actor>> syncGraph = Collections.synchronizedMap(graph);
 
-		// This algorithm is O(k * n^2)... 💀
+		// This algorithm is O(M * V^2) (I think)... 💀
+		// Using parallelization makes this slightly more bearable
 		actors.values().parallelStream().forEach(actor -> {
+			// Same deal here to prevent race conditions
 			syncGraph.put(actor, Collections.synchronizedList(new ArrayList<>()));
 
+			// Iterate over every actor
 			for(Actor innerActor : actors.values()) {
+
+				// Skip if the actors are the same
 				if(actor == innerActor)
 					continue;
 
 				Set<Movie> commonMovies = findCommonMovies(actor, innerActor);
 
+				// We insert an actor as a neighbour for every movie the actors have in common
+				// NOTE: We end up with an adjacency list with duplicate values
+				// We do this to represent multiple edges between the same actors
 				commonMovies.forEach(movie -> syncGraph.get(actor).add(innerActor));
 			}
 
@@ -134,7 +148,7 @@ public final class Exercise1 extends Exercise {
 		System.out.print("Generating Graph..." + SUCCESS + " DONE" + RESET + "           \n");
 	}
 
-	// Generate a cache file of our Graph
+	// Generate a cache file for our Graph
 	// Sparing us from having to generate the Graph every runtime
 	private static void generateCacheFile(String filepath) throws Exception {
 		System.out.print("Generating " + filepath);
