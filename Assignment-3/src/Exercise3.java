@@ -65,7 +65,10 @@ public final class Exercise3 extends Exercise {
 	}
 
 	// BFS but harder, an implementation of lazy dijkstra's algorithm
+	// With minor optimizations like stopping the algorithm early when certain conditions are met
 	private static float dijkstra(Actor srcActor, Actor dstActor, Map<Actor, Actor> predecessors) {
+		// Pair<Actor, Float> helper class
+		// For storing Actors together with their distances from our srcActor
 		class Pair implements Comparable<Pair> {
 			private Actor key;
 			private Float value;
@@ -132,6 +135,7 @@ public final class Exercise3 extends Exercise {
 		return -1;
 	}
 
+	// Calculate the smallest distance between two actors
 	private static float calculateMinDistance(Actor actorA, Actor actorB) {
 		float highestRating = 0.0f;
 
