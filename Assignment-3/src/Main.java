@@ -7,9 +7,9 @@ public class Main {
 		System.out.print(HIDE_CURSOR + "\r");
 
 		Exercise1.run();
-		Exercise2.run();
-		Exercise3.run();
-		// Exercise4.run();
+		// Exercise2.run();
+		// Exercise3.run();
+		Exercise4.run();
 
 		System.out.print(SHOW_CURSOR + "\r");
 	}

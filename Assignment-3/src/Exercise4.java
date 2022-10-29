@@ -10,10 +10,7 @@ public final class Exercise4 extends Exercise {
 		
 	public static void run() {
 		System.out.println("\nExercise " + NUMBERS + "4" + RESET + ":\n");
-		printComponentsCount();
-	}
 
-	public static void printComponentsCount() {
 		System.out.print("Counting components...\r");
 		
 		for(Actor actor : graph.keySet()) {
@@ -33,14 +30,18 @@ public final class Exercise4 extends Exercise {
 			}
 		}
 
+		// We cast our Map to a TreeMap to sort based on the value of our Key
+		// TreeMaps sort in natural order so we use descendingMap to print in reverse order
 		TreeMap<Integer, AtomicInteger> sorted = new TreeMap<>(result);
 		for(Entry<Integer, AtomicInteger> entry : sorted.descendingMap().entrySet()) {
 			System.out.printf("There are %s%d%s components of size %s%d%s\n", NUMBERS, entry.getValue().intValue(), RESET, NUMBERS, entry.getKey(), RESET);
 		}
 	}
 
-	// We use an iterative implementation of Depth-First-Search
-	// Else we get a StackOverflowError on a large enough Graph
+	// Most solutions for this problem uses DFS
+	// But our Graph is too large for the recursive implementation
+	// Therefore we use an iterative implementation of Depth-First-Search
+	// Else we get a StackOverflowError
 	public static int iterativeDFS(Actor actor) {
 		Stack<Actor> stack = new Stack<>();
 
