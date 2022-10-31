@@ -159,7 +159,7 @@ public final class Exercise1 extends Exercise {
 				fw.write(node.getId());
 
 				for(Actor actor : neighbours)
-				fw.write(" " + actor.getId());
+					fw.write(" " + actor.getId());
 
 				fw.newLine();
 			} catch(Exception e) {}

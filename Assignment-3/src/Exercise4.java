@@ -7,12 +7,12 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public final class Exercise4 extends Exercise {
 	private static Map<Actor, Boolean> visited = new HashMap<>();
-		
+
 	public static void run() {
 		System.out.println("\nExercise " + NUMBERS + "4" + RESET + ":\n");
 
 		System.out.print("Counting components...\r");
-		
+
 		for(Actor actor : graph.keySet()) {
 			visited.put(actor, false);
 		}

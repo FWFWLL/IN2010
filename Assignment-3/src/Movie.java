@@ -8,7 +8,7 @@ public class Movie {
 		this.id = fields[0];
 		this.title = fields[1];
 		this.rating = Float.parseFloat(fields[2]);
-		this.votes = Integer.parseInt(fields[3]); 
+		this.votes = Integer.parseInt(fields[3]);
 	}
 
 	public String getId() {return id;}

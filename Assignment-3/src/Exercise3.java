@@ -72,7 +72,7 @@ public final class Exercise3 extends Exercise {
 		class Pair implements Comparable<Pair> {
 			private Actor key;
 			private Float value;
-				
+
 			public Pair(Actor key, Float value) {
 				this.key = key;
 				this.value = value;
