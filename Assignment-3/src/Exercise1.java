@@ -64,7 +64,7 @@ public final class Exercise1 extends Exercise {
 			for(String line = br.readLine(); line != null; line = br.readLine()) {
 				String[] fields = line.trim().split("\t");
 				Actor actor = new Actor(fields[0], fields[1]);
-				
+
 				for(int i = 2; i < fields.length; i++)
 					actor.addMovie(fields[i]);
 
@@ -74,7 +74,7 @@ public final class Exercise1 extends Exercise {
 
 		System.out.println(SUCCESS + " DONE" + RESET);
 	}
-	
+
 	// If cache file exists, populate graph based on cache file content
 	private static boolean populateGraph() {
 		System.out.print(CACHE_FILEPATH + "...");
