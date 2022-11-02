@@ -14,7 +14,7 @@ public final class Exercise1 extends Exercise {
 	private final static String MOVIES_FILEPATH = "tsv/movies.tsv";
 	private final static String ACTORS_FILEPATH = "tsv/actors.tsv";
 
-	public static void run() throws Exception {
+	public static void run() {
 		readMoviesTSV(MOVIES_FILEPATH);
 		readActorsTSV(ACTORS_FILEPATH);
 
@@ -28,13 +28,10 @@ public final class Exercise1 extends Exercise {
 		int numNodes = graph.size();
 
 		// Number of edges in our Graph is the accumulated size of all list Values
-		int numEdges = 0;
-		for(List<Actor> edges : graph.values())
-			numEdges += edges.size();
-
-		// Since we are using an adjacency list, we have duplicate edges for completeness
-		// Therefore we just halve our edge count
-		numEdges /= 2;
+		int numEdges = graph.values()
+			.stream()
+			.mapToInt(list -> list.size())
+			.sum() / 2;
 
 		System.out.println("\nExercise " + NUMBERS + "1" + RESET + ":\n");
 		System.out.println("Nodes: " + NUMBERS + numNodes + RESET);
@@ -42,7 +39,7 @@ public final class Exercise1 extends Exercise {
 	}
 
 	// Read movies.tsv file and insert into a Map using tt-id as Keys
-	private static void readMoviesTSV(String filepath) throws Exception {
+	private static void readMoviesTSV(String filepath) {
 		System.out.print("Reading " + filepath);
 
 		try(BufferedReader br = new BufferedReader(new FileReader(filepath))) {
@@ -51,13 +48,13 @@ public final class Exercise1 extends Exercise {
 
 				movies.put(fields[0], new Movie(fields));
 			}
-		}
+		} catch(Exception e) {}
 
 		System.out.println(SUCCESS + " DONE" + RESET);
 	}
 
 	// Read actors.tsv file and insert into a Map using nm-id as Keys
-	private static void readActorsTSV(String filepath) throws Exception {
+	private static void readActorsTSV(String filepath) {
 		System.out.print("Reading " + filepath);
 
 		try(BufferedReader br = new BufferedReader(new FileReader(filepath))) {
@@ -70,7 +67,7 @@ public final class Exercise1 extends Exercise {
 
 				actors.put(fields[0], actor);
 			}
-		}
+		} catch(Exception e) {}
 
 		System.out.println(SUCCESS + " DONE" + RESET);
 	}
@@ -111,7 +108,7 @@ public final class Exercise1 extends Exercise {
 	}
 
 	// Generates our Graph from scratch
-	private static void buildGraph() throws Exception {
+	private static void buildGraph() {
 		System.out.print("Generating Graph...\r");
 
 		// Since we are planning to insert on multiple threads
@@ -150,22 +147,21 @@ public final class Exercise1 extends Exercise {
 
 	// Generate a cache file for our Graph
 	// Sparing us from having to generate the Graph every runtime
-	private static void generateCacheFile(String filepath) throws Exception {
+	private static void generateCacheFile(String filepath) {
 		System.out.print("Generating " + filepath);
 
-		BufferedWriter fw = new BufferedWriter(new FileWriter(filepath));
-		graph.forEach((node, neighbours) -> {
-			try {
-				fw.write(node.getId());
+		try(BufferedWriter fw = new BufferedWriter(new FileWriter(filepath))) {
+			graph.forEach((node, neighbours) -> {
+				try {
+					fw.write(node.getId());
 
-				for(Actor actor : neighbours)
-					fw.write(" " + actor.getId());
+					for(Actor actor : neighbours)
+						fw.write(" " + actor.getId());
 
-				fw.newLine();
-			} catch(Exception e) {}
-		});
-
-		fw.close();
+					fw.newLine();
+				} catch(Exception e) {}
+			});
+		} catch(Exception e) {}
 
 		System.out.println(SUCCESS + " DONE" + RESET);
 	}

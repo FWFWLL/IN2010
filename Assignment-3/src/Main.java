@@ -3,7 +3,7 @@ public class Main {
 	private final static String HIDE_CURSOR = "\u001B[?25l";
 	private final static String SHOW_CURSOR = "\u001B[?25h";
 
-	public static void main(String[] args) throws Exception {
+	public static void main(String[] args) {
 		System.out.print(HIDE_CURSOR + "\r");
 
 		Exercise1.run();
@@ -13,4 +13,8 @@ public class Main {
 
 		System.out.print(SHOW_CURSOR + "\r");
 	}
+
+	// public static void main(String[] args) throws Exception {
+	// 	Oppgave1.run();
+	// }
 }

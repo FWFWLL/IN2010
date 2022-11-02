@@ -10,7 +10,7 @@ public class Actor {
 		this.id = id;
 		this.name = name;
 
-		movieAppearances = new HashSet<String>();
+		movieAppearances = new HashSet<>();
 	}
 
 	public String getId() {return id;}
