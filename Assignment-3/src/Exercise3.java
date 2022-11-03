@@ -1,5 +1,6 @@
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
@@ -78,19 +79,14 @@ public final class Exercise3 extends Exercise {
 			public Float getValue() {return value;}
 
 			@Override
-			public int compareTo(Pair other) {
-				return this.getValue().compareTo(other.getValue());
-			}
+			public int compareTo(Pair other) {return this.getValue().compareTo(other.getValue());}
 		}
 
-		Map<Actor, Boolean> visited = new HashMap<>();
+		Set<Actor> visited = new HashSet<>();
 		Map<Actor, Float> dist = new HashMap<>();
 
-		for(Actor actor : graph.keySet()) {
-			visited.put(actor, false);
-			pred.put(actor, null);
+		for(Actor actor : graph.keySet())
 			dist.put(actor, MAX_RATING);
-		}
 
 		dist.put(srcActor, 0.0f);
 
@@ -102,13 +98,13 @@ public final class Exercise3 extends Exercise {
 			Actor actor = entry.getKey();
 			float minDistance = entry.getValue();
 
-			visited.put(actor, true);
+			visited.add(actor);
 
 			if(dist.get(actor) < minDistance)
 				continue;
 
 			for(Actor curr : graph.get(actor)) {
-				if(visited.get(curr))
+				if(visited.contains(curr))
 					continue;
 
 				float newDistance = dist.get(actor) + calculateMinDistance(actor, curr);
@@ -133,11 +129,9 @@ public final class Exercise3 extends Exercise {
 
 		Set<Movie> commonMovies = findCommonMovies(actorA, actorB);
 
-		for(Movie movie : commonMovies) {
-			if(movie != null && movie.getRating() >= highestRating) {
+		for(Movie movie : commonMovies)
+			if(movie != null && movie.getRating() >= highestRating)
 				highestRating = movie.getRating();
-			}
-		}
 
 		return MAX_RATING - highestRating;
 	}

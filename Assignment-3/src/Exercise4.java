@@ -13,9 +13,8 @@ public final class Exercise4 extends Exercise {
 
 		System.out.print("Counting components...\r");
 
-		for(Actor actor : graph.keySet()) {
+		for(Actor actor : graph.keySet())
 			visited.put(actor, false);
-		}
 
 		Map<Integer, AtomicInteger> result = new HashMap<>();
 
@@ -33,9 +32,8 @@ public final class Exercise4 extends Exercise {
 		// We cast our Map to a TreeMap to sort based on the value of our Key
 		// TreeMaps sort in natural order so we use descendingMap to print in reverse order
 		TreeMap<Integer, AtomicInteger> sorted = new TreeMap<>(result);
-		for(Entry<Integer, AtomicInteger> entry : sorted.descendingMap().entrySet()) {
+		for(Entry<Integer, AtomicInteger> entry : sorted.descendingMap().entrySet())
 			System.out.printf("There are %s%d%s components of size %s%d%s\n", NUMBERS, entry.getValue().intValue(), RESET, NUMBERS, entry.getKey(), RESET);
-		}
 	}
 
 	// Most solutions for this problem uses DFS
@@ -58,10 +56,9 @@ public final class Exercise4 extends Exercise {
 				size++;
 			}
 
-			for(Actor neighbour : graph.get(actor)) {
+			for(Actor neighbour : graph.get(actor))
 				if(!visited.get(neighbour))
 					stack.push(neighbour);
-			}
 		}
 
 		return size;
