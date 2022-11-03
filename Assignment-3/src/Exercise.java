@@ -25,12 +25,12 @@ public abstract class Exercise {
 
 		Set<Movie> setA = actorA.getMovieAppearances()
 			.stream()
-			.map(movieId -> movies.get(movieId))
+			.map(movies::get)
 			.collect(Collectors.toCollection(HashSet::new));
 
 		Set<Movie> setB = actorB.getMovieAppearances()
 			.stream()
-			.map(movieId -> movies.get(movieId))
+			.map(movies::get)
 			.collect(Collectors.toCollection(HashSet::new));
 
 		for(Movie movie : setA) {
