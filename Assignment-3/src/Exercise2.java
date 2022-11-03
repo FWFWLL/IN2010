@@ -1,7 +1,9 @@
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
+import java.util.Set;
 import java.util.Stack;
 
 public final class Exercise2 extends Exercise {
@@ -20,10 +22,10 @@ public final class Exercise2 extends Exercise {
 		Actor srcActor = actors.get(srcActorId);
 		Actor dstActor = actors.get(dstActorId);
 
-		Map<Actor, Actor> predecessors = new HashMap<>();
+		Map<Actor, Actor> pred = new HashMap<>();
 
 		// BFS returns false when no path was found between two Actors
-		if(!BFS(srcActor, dstActor, predecessors)) {
+		if(!BFS(srcActor, dstActor, pred)) {
 			System.out.println("\nGiven source and destination are not connected");
 
 			return;
@@ -31,12 +33,8 @@ public final class Exercise2 extends Exercise {
 
 		// Reconstruct path using a Stack to reverse the order when printing
 		Stack<Actor> path = new Stack<>();
-		Actor crawl = dstActor;
-		path.push(crawl);
-		while(predecessors.get(crawl) != null) {
-			path.push(predecessors.get(crawl));
-			crawl = predecessors.get(crawl);
-		}
+		for(Actor actor = dstActor; actor != null; actor = pred.get(actor))
+			path.push(actor);
 
 		Actor prev = path.pop();
 		System.out.println("\n" + prev.getName());
@@ -55,29 +53,21 @@ public final class Exercise2 extends Exercise {
 	}
 
 	// Modified version of Breath-First-Search that stores predecessors
-	private static boolean BFS(Actor srcActor, Actor dstActor, Map<Actor, Actor> predecessors) {
+	private static boolean BFS(Actor srcActor, Actor dstActor, Map<Actor, Actor> pred) {
 		Queue<Actor> queue = new LinkedList<>();
-		Map<Actor, Boolean> visited = new HashMap<>();
+		Set<Actor> visited = new HashSet<>();
 
-		for(Actor actor : graph.keySet()) {
-			visited.put(actor, false);
-			predecessors.put(actor, null);
-		}
-
-		visited.put(srcActor, true);
 		queue.offer(srcActor);
+		visited.add(srcActor);
 
 		while(!queue.isEmpty()) {
 			Actor actor = queue.poll();
 
-			if(actor == null)
-				break;
-
 			for(Actor curr : graph.get(actor)) {
-				if(!visited.get(curr)) {
-					visited.put(curr, true);
-					predecessors.put(curr, actor);
+				if(!visited.contains(curr)) {
+					pred.put(curr, actor);
 					queue.offer(curr);
+					visited.add(curr);
 
 					if(curr == dstActor)
 						return true;

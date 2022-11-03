@@ -7,14 +7,16 @@ public class Main {
 		System.out.print(HIDE_CURSOR + "\r");
 
 		Exercise1.run();
-		Exercise2.run();
+		// Exercise2.run();
 		Exercise3.run();
-		Exercise4.run();
+		// Exercise4.run();
 
 		System.out.print(SHOW_CURSOR + "\r");
 	}
 
 	// public static void main(String[] args) throws Exception {
 	// 	Oppgave1.run();
+	// 	Oppgave2.run();
+	// 	Oppgave3.run();
 	// }
 }

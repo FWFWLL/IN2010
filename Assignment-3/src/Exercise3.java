@@ -26,23 +26,19 @@ public final class Exercise3 extends Exercise {
 		Actor srcActor = actors.get(srcActorId);
 		Actor dstActor = actors.get(dstActorId);
 
-		Map<Actor, Actor> predecessors = new HashMap<>();
+		Map<Actor, Actor> pred = new HashMap<>();
 
-		float totalDistance = dijkstra(srcActor, dstActor, predecessors);
+		float totalDistance = dijkstra(srcActor, dstActor, pred);
 
-		if(totalDistance == -1) {
+		if(totalDistance < 0.0f) {
 			System.out.println("Given source and destination are not connected");
 
 			return;
 		}
 
 		Stack<Actor> path = new Stack<>();
-		Actor crawl = dstActor;
-		path.push(crawl);
-		while(predecessors.get(crawl) != null) {
-			path.push(predecessors.get(crawl));
-			crawl = predecessors.get(crawl);
-		}
+		for(Actor actor = dstActor; actor != null; actor = pred.get(actor))
+			path.push(actor);
 
 		Actor prev = path.pop();
 		System.out.println(prev.getName() + "                   ");
@@ -66,7 +62,7 @@ public final class Exercise3 extends Exercise {
 
 	// BFS but harder, an implementation of lazy dijkstra's algorithm
 	// With minor optimizations like stopping the algorithm early when certain conditions are met
-	private static float dijkstra(Actor srcActor, Actor dstActor, Map<Actor, Actor> predecessors) {
+	private static float dijkstra(Actor srcActor, Actor dstActor, Map<Actor, Actor> pred) {
 		// Pair<Actor, Float> helper class
 		// For storing Actors together with their distances from our srcActor
 		class Pair implements Comparable<Pair> {
@@ -88,51 +84,47 @@ public final class Exercise3 extends Exercise {
 		}
 
 		Map<Actor, Boolean> visited = new HashMap<>();
-		Map<Actor, Float> distances = new HashMap<>();
+		Map<Actor, Float> dist = new HashMap<>();
 
 		for(Actor actor : graph.keySet()) {
 			visited.put(actor, false);
-			predecessors.put(actor, null);
-			distances.put(actor, MAX_RATING);
+			pred.put(actor, null);
+			dist.put(actor, MAX_RATING);
 		}
 
-		distances.put(srcActor, 0.0f);
+		dist.put(srcActor, 0.0f);
 
-		PriorityQueue<Pair> priorityQueue = new PriorityQueue<>();
-		priorityQueue.offer(new Pair(srcActor, 0.0f));
+		PriorityQueue<Pair> pq = new PriorityQueue<>();
+		pq.offer(new Pair(srcActor, 0.0f));
 
-		while(!priorityQueue.isEmpty()) {
-			Pair entry = priorityQueue.poll();
-
-			Actor index = entry.getKey();
+		while(!pq.isEmpty()) {
+			Pair entry = pq.poll();
+			Actor actor = entry.getKey();
 			float minDistance = entry.getValue();
 
-			visited.put(index, true);
+			visited.put(actor, true);
 
-			if(distances.get(index) < minDistance)
+			if(dist.get(actor) < minDistance)
 				continue;
 
-			if(index == null)
-				break;
-
-			for(Actor curr : graph.get(index)) {
+			for(Actor curr : graph.get(actor)) {
 				if(visited.get(curr))
 					continue;
 
-				float newDistance = distances.get(index) + calculateMinDistance(index, curr);
+				float newDistance = dist.get(actor) + calculateMinDistance(actor, curr);
 
-				if(newDistance < distances.get(curr)) {
-					predecessors.put(curr, index);
-					distances.put(curr, newDistance);
-					priorityQueue.offer(new Pair(curr, newDistance));
+				if(newDistance < dist.get(curr)) {
+					pred.put(curr, actor);
+					dist.put(curr, newDistance);
+					pq.offer(new Pair(curr, newDistance));
 				}
 			}
 
-			if(index == dstActor)
-				return distances.get(dstActor);
+			if(actor == dstActor)
+				return dist.get(dstActor);
 		}
 
-		return -1;
+		return -1.0f;
 	}
 
 	// Calculate the smallest distance between two actors

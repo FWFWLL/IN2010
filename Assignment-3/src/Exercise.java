@@ -20,7 +20,7 @@ public abstract class Exercise {
 	protected final static Map<String, Actor> actors = new HashMap<>();
 
 	// Helper method for finding a set of movies shared between two Actors
-	public static Set<Movie> findCommonMovies(Actor actorA, Actor actorB) {
+	protected static Set<Movie> findCommonMovies(Actor actorA, Actor actorB) {
 		Set<Movie> results = new HashSet<>();
 
 		Set<Movie> setA = actorA.getMovieAppearances()
