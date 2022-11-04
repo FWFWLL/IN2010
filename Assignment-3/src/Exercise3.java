@@ -30,7 +30,6 @@ public final class Exercise3 extends Exercise {
 		Map<Actor, Actor> pred = new HashMap<>();
 
 		float totalDistance = dijkstra(srcActor, dstActor, pred);
-
 		if(totalDistance < 0.0f) {
 			System.out.println("Given source and destination are not connected");
 

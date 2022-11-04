@@ -4,6 +4,8 @@ public class Main {
 	private final static String SHOW_CURSOR = "\u001B[?25h";
 
 	public static void main(String[] args) {
+		long t = System.nanoTime();
+
 		System.out.print(HIDE_CURSOR + "\r");
 
 		Exercise1.run();
@@ -11,6 +13,7 @@ public class Main {
 		Exercise3.run();
 		Exercise4.run();
 
-		System.out.print(SHOW_CURSOR + "\r");
+		float time = (System.nanoTime() - t) / 1_000_000_000.0f;
+		System.out.printf("%s\nRuntime: %.2f sec\n", SHOW_CURSOR, time);
 	}
 }
